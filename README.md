@@ -1,3 +1,6 @@
+# Requires Node.js 20.15
+[Install Node.js](https://nodejs.org/en/learn/getting-started/how-to-install-nodejs)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
