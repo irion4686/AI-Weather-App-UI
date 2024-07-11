@@ -1,8 +1,14 @@
 import logo from './logo.svg';
 import './App.css';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import Nav from 'react-bootstrap/Nav';
 import ApiUtils from './Utils/ApiUtils';
+import WeeklyForecast from './Panels/WeeklyForecast';
+import HourlyForecast from './Panels/HourlyForecast';
+import CurrentWeather from './Panels/CurrentWeather';
 function App() {
+  const [currLocation, setCurrLocation] = React.useState('');
+  
   const apiUtils = new ApiUtils();
   useEffect(() => {
     const fetchData = async () => {
@@ -24,23 +30,38 @@ function App() {
     };
 
     fetchData();
-  }, []);
+  });
+  
+  const onNavSelect = (eventKey) => {
+    switch (eventKey) {
+      case 'current':
+        setCurrLocation('current')
+        break;
+      case 'weekly':
+        setCurrLocation('weekly')
+        break;
+      case 'hourly':
+        setCurrLocation('hourly')
+    }
+  }
   
   return (
-    <div className="App">
+    <div class=".container-fluid justify-content-center" className='AI Weather App'>
+      <Nav variant="tabs" defaultActiveKey="/home" onSelect={onNavSelect}>
+        <Nav.Item>
+          <Nav.Link eventKey="current">Current</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link eventKey="weekly">7 Day</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link eventKey="hourly">Hourly</Nav.Link>
+        </Nav.Item>
+      </Nav>
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        {currLocation === 'current' && <CurrentWeather/>}
+        {currLocation === 'weekly' && <WeeklyForecast/>}
+        {currLocation === 'hourly' && <HourlyForecast/>}
       </header>
     </div>
   );
