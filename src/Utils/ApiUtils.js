@@ -1,4 +1,4 @@
-﻿class ApiUtils {
+class ApiUtils {
     constructor(baseURL) {
         this.baseURL = process.env.REACT_APP_BACKEND_URL;
     }
@@ -53,6 +53,18 @@
                 zipcode: zipcode
             }
             const result = await this.post('/forecast/weekly', body);
+            return await result['forecast'];
+        } catch (error) {
+            this.handleError(error)
+        }
+    }
+
+    async getHourlyForecast(zipcode)  {
+        try {
+            let body = {
+                zipcode: zipcode
+            }
+            const result = await this.post('/forecast/hourly', body);
             return await result['forecast'];
         } catch (error) {
             this.handleError(error)
