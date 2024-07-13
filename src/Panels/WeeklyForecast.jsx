@@ -26,7 +26,9 @@ const WeeklyForecast = (props) => {
         event.preventDefault()
         const regex = /^\d{5}$/;
         if (regex.test(event.target[0].value)) {
+            setIsValid(true)
             getForecast(event.target[0].value)
+            
         } else {
             setIsValid(false)
         }
