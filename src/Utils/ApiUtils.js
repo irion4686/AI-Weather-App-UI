@@ -46,6 +46,18 @@
         console.error('API call failed. ', error);
         throw error;
     }
+    
+    async getWeeklyForecast(zipcode)  {
+        try {
+            let body = {
+                zipcode: zipcode
+            }
+            const result = await this.post('/forecast/weekly', body);
+            return await result['forecast'];
+        } catch (error) {
+            this.handleError(error)
+        }
+    }
 }
 
 export default ApiUtils;

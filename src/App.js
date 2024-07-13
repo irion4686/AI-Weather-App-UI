@@ -1,38 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Nav from 'react-bootstrap/Nav';
-import ApiUtils from './Utils/ApiUtils';
+import Navbar from 'react-bootstrap/Navbar';
+import Container from 'react-bootstrap/Container';
 import WeeklyForecast from './Panels/WeeklyForecast';
 import HourlyForecast from './Panels/HourlyForecast';
 import CurrentWeather from './Panels/CurrentWeather';
-function App() {
-  const [currLocation, setCurrLocation] = React.useState('');
-  
-  const apiUtils = new ApiUtils();
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        let body = {
-          zipcode: "28425"
-        }
-        const result = await apiUtils.post('/forecast/hourly', body);
-        console.log(result);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-      try {
-        const result = await apiUtils.get('/forecast/28425');
-        console.log(result);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+import ErrorModal from './Components/ErrorModal';
 
-    fetchData();
-  });
+function App() {
+  const [currLocation, setCurrLocation] = useState('current');
+  const [error, setError] = useState(null)
+  const [showError, setShowError] = useState(false)
   
   const onNavSelect = (eventKey) => {
+    if (currLocation === eventKey) return
     switch (eventKey) {
       case 'current':
         setCurrLocation('current')
@@ -42,28 +23,49 @@ function App() {
         break;
       case 'hourly':
         setCurrLocation('hourly')
+        break;
+      default:
+        setCurrLocation('current')
     }
+  }
+
+  const handleError = (error) => {
+    setError(error)
+    setShowError(true)
+  }
+
+  const onCloseError = () => {
+    setError(null);
+    setShowError(false)
   }
   
   return (
-    <div class=".container-fluid justify-content-center" className='AI Weather App'>
-      <Nav variant="tabs" defaultActiveKey="/home" onSelect={onNavSelect}>
-        <Nav.Item>
-          <Nav.Link eventKey="current">Current</Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link eventKey="weekly">7 Day</Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link eventKey="hourly">Hourly</Nav.Link>
-        </Nav.Item>
-      </Nav>
-      <header className="App-header">
-        {currLocation === 'current' && <CurrentWeather/>}
-        {currLocation === 'weekly' && <WeeklyForecast/>}
-        {currLocation === 'hourly' && <HourlyForecast/>}
-      </header>
+    <div class="bg-dark text-white" >
+      <Container  >
+        <Navbar sticky='top'  bg='dark-subtle' data-bs-theme="dark" >
+          <Container >
+            <Nav variant="tabs" defaultActiveKey='current' onSelect={onNavSelect}>
+              <Nav.Item>
+                <Nav.Link eventKey="current">Today</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="weekly">7 Day</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="hourly">Hourly</Nav.Link>
+              </Nav.Item>
+            </Nav>
+          </Container>
+        </Navbar>
+        <div class="border rounded min-vh-100" >
+          {error !== null && <ErrorModal show={showError} onHide={onCloseError} error={error}/>}
+          {currLocation === 'current' && <CurrentWeather/>}
+          {currLocation === 'weekly' && <Container><WeeklyForecast onError={handleError} /></Container>}
+          {currLocation === 'hourly' && <HourlyForecast/>}
+        </div>
+      </Container>
     </div>
+    
   );
 }
 
