@@ -31,34 +31,51 @@ const WeeklyForecast = (props) => {
             
         } else {
             setIsValid(false)
-        }
-        
+        }   
     }
-    // useEffect(() => {
-    //     getForecast();
-    // })
+
+    const onChangeActivity = (event) => {
+        setForecast([...apiUtils.getRatings(event.target?.value, forecast)])
+    }
+   
     return (
         <Container style={{ margin:'20px'}}>
             <div class="d-flex justify-content-center" >
-                <Form  onSubmit={handleSubmit}>
-                    <Form.Group>
-                        <Stack direction='horizontal' gap={3} >
-                            <Form.Label htmlFor='zipcode'>Zipcode:</Form.Label>
-                            <Stack>
-                                <Form.Control required id='zipcode' placeholder='Enter zipcode' isInvalid={!isValid}/>
-                                <Form.Control.Feedback type="invalid">
-                                    Please provide a valid zip.
-                                </Form.Control.Feedback>
+                <stack>
+                    <Form  onSubmit={handleSubmit}>
+                        <Form.Group>
+                            <Stack direction='horizontal' gap={3} >
+                                <Form.Label htmlFor='zipcode'>Zipcode:</Form.Label>
+                                <Stack>
+                                    <Form.Control required id='zipcode' placeholder='Enter zipcode' isInvalid={!isValid}/>
+                                    <Form.Control.Feedback type="invalid">
+                                        Please provide a valid zip.
+                                    </Form.Control.Feedback>
+                                </Stack>
+                                <Button size='sm' variant='light' type='submit'>Get Forecast</Button>
                             </Stack>
-                            <Button size='sm' variant='light' type='submit'>Get Forecast</Button>
-                        </Stack>
-                    </Form.Group>
-                </Form>
+                        </Form.Group>
+                    </Form>
+                    <Form  onSubmit={handleSubmit}>
+                        <Form.Group>
+                            <Stack direction='horizontal' gap={3} >
+                                <Form.Label htmlFor='activity'>Activity:</Form.Label>
+                                <Form.Select required id='activity' onChange={onChangeActivity}>
+                                    <option>Choose an activity</option>
+                                    <option value='Running'>Running</option>
+                                    <option value='Hiking'>Hiking</option>
+                                    <option value='Golf'>Golf</option>
+                                </Form.Select>
+                            </Stack>
+                        </Form.Group>
+                    </Form>
+                </stack>
+
             </div>
             
             <p class="h1 text-center" style={{ padding: '20px 0'}}>7-Day Forecast</p>
             <div style={{ padding: '10px 0', borderTop: '1px solid white', width: '100%' }}></div>
-            {forecast.map(day => <div ><DailyForecastComponent forecast={day}/></div>)}
+            {forecast?.length > 0 && forecast.map(day => <div ><DailyForecastComponent key={Math.ceil(Math.random * 10000)} activity={forecast?.activity} forecast={day} rating={forecast?.ratings} /></div>)}
             {forecast.length === 0 && <p class="h1 text-center">Enter a zipcode to get the forecast</p>}
         </Container>
     )

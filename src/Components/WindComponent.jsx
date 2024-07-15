@@ -3,7 +3,6 @@ import '../../src/Styling/Icons/Styling/weather-icons-wind.min.css'
 
 const WindComponent = (props) => {
     let windClass = 'wi wi-wind towards-' + props.direction + '-deg wi-fw'
-    console.log(windClass)
     return (
         <div class="d-flex align-items-baseline">
             <i class='wi wi-strong-wind pe-1'></i>

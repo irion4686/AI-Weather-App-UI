@@ -1,4 +1,4 @@
-class ApiUtils {
+﻿class ApiUtils {
     constructor(baseURL) {
         this.baseURL = process.env.REACT_APP_BACKEND_URL;
     }
@@ -69,6 +69,18 @@ class ApiUtils {
         } catch (error) {
             this.handleError(error)
         }
+    }
+
+    getRatings(activity, forecasts) {
+        let newArray = [...forecasts]
+        newArray.forEach(element => {
+            let min = 1
+            let max = 10
+            let value = Math.floor(Math.random() * (max - min + 1)) + min
+            element.ratings = value
+            element.activity = activity
+        });
+        return newArray
     }
 }
 
