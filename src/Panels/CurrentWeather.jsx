@@ -51,6 +51,12 @@ const CurrentWeather = (props) => {
         }
     }
 
+    const formatDate = (dateStr) => {
+        const date = new Date(dateStr + 'Z');
+        const options = { weekday: 'short', month: 'short', day: 'numeric' };
+        return date.toLocaleDateString('en-US', options);
+    }
+
     return (
         <Container style={{ margin: '20px' }}>
             <div className="d-flex justify-content-center">
@@ -71,6 +77,12 @@ const CurrentWeather = (props) => {
             </div>
 
             <p className="h1 text-center" style={{ padding: '20px 0' }}>Today's Forecast</p>
+            {dailyForecast && (
+                <div className="text-center mb-4">
+                    <i className="wi wi-barometer"></i>
+                    <p><strong>Date:</strong> {formatDate(dailyForecast.date)}</p>
+                </div>
+            )}
             <div style={{ padding: '10px 0', borderTop: '1px solid white', width: '100%' }}></div>
 
             {currentWeather && (
@@ -89,60 +101,43 @@ const CurrentWeather = (props) => {
                     <div style={{ padding: '10px 0', borderTop: '1px solid white', width: '100%' }}></div>
                     <p className="h2 text-center mt-4">Today's Forecast</p>
                     <Card className="mt-4 p-3" style={{ backgroundColor: '#f8f9fa' }}>
-                        <Row>
-                            <Col className="d-flex align-items-center">
+                        <Row className="text-center">
+                            <Col className="d-flex flex-column align-items-center">
                                 <i className="wi wi-thermometer"></i>
-                                <p className="mb-0"><strong>Max Temp:</strong> {dailyForecast.max_temp}°F</p>
+                                <p><strong>{dailyForecast.max_temp + 'ºF'}</strong>/<small>{dailyForecast.min_temp + 'ºF'}</small></p>
                             </Col>
-                            <Col className="d-flex align-items-center">
-                                <i className="wi wi-thermometer-exterior"></i>
-                                <p className="mb-0"><strong>Min Temp:</strong> {dailyForecast.min_temp}°F</p>
-                            </Col>
-                            <Col className="d-flex align-items-center">
-                                <i className="wi wi-direction-up"></i>
-                                <p className="mb-0"><strong>Max Apparent Temp:</strong> {dailyForecast.max_apparent_temp}°F</p>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col className="d-flex align-items-center">
-                                <i className="wi wi-direction-down"></i>
-                                <p className="mb-0"><strong>Min Apparent Temp:</strong> {dailyForecast.min_apparent_temp}°F</p>
-                            </Col>
-                            <Col className="d-flex align-items-center">
+                            <Col className="d-flex flex-column align-items-center">
                                 <i className="wi wi-strong-wind"></i>
-                                <p className="mb-0"><strong>Max Wind Speed:</strong> {dailyForecast.max_wind_speed} mph</p>
+                                <p className="mb-0"><strong>Wind:</strong> {dailyForecast.max_wind_speed} mph</p>
                             </Col>
-                            <Col className="d-flex align-items-center">
-                                <i className="wi wi-windy"></i>
-                                <p className="mb-0"><strong>Dominant Wind Direction:</strong> {dailyForecast.dominant_wind_direction}°</p>
+                            <Col className="d-flex flex-column align-items-center">
+                                <i className="wi wi-raindrop"></i>
+                                <p className="mb-0"><strong>Precipitation:</strong> {dailyForecast.precip_prob}%</p>
                             </Col>
                         </Row>
-                        <Row>
-                            <Col className="d-flex align-items-center">
-                                <i className="wi wi-raindrop"></i>
-                                <p className="mb-0"><strong>Precipitation Probability:</strong> {dailyForecast.precip_prob}%</p>
-                            </Col>
-                            <Col className="d-flex align-items-center">
-                                <i className="wi wi-humidity"></i>
+                        <Row className="text-center mt-2">
+                            <Col className="d-flex flex-column align-items-center">
+                                <i className="wi wi-day-sunny"></i>
                                 <p className="mb-0"><strong>UV Index:</strong> {dailyForecast.uv_index}</p>
                             </Col>
-                            <Col className="d-flex align-items-center">
+                            <Col className="d-flex flex-column align-items-center">
                                 <i className="wi wi-sunrise"></i>
                                 <p className="mb-0"><strong>Sunrise:</strong> {new Date(dailyForecast.sunrise).toLocaleTimeString()}</p>
                             </Col>
-                        </Row>
-                        <Row>
-                            <Col className="d-flex align-items-center">
+                            <Col className="d-flex flex-column align-items-center">
                                 <i className="wi wi-sunset"></i>
                                 <p className="mb-0"><strong>Sunset:</strong> {new Date(dailyForecast.sunset).toLocaleTimeString()}</p>
                             </Col>
-                            <Col className="d-flex align-items-center">
-                                <i className="wi wi-day-sunny"></i>
+                        </Row>
+                        <Row className="text-center mt-2">
+                            <Col className="d-flex flex-column align-items-center">
+                                {IconUtils.getWeatherIcon(dailyForecast.weather)}
                                 <p className="mb-0"><strong>Weather:</strong> {dailyForecast.weather}</p>
                             </Col>
-                            <Col className="d-flex align-items-center">
-                                <i className="wi wi-barometer"></i>
-                                <p className="mb-0"><strong>Date:</strong> {dailyForecast.date}</p>
+                        </Row>
+                        <Row className="text-center mt-2">
+                            <Col className="d-flex flex-column align-items-center">
+                                <p className="text-center"><span className="fw-semibold">{'Feels like: '}</span><strong>{dailyForecast.max_apparent_temp + 'ºF'}</strong>/<small>{dailyForecast.min_apparent_temp + 'ºF'}</small></p>
                             </Col>
                         </Row>
                     </Card>
