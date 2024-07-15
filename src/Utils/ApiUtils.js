@@ -1,4 +1,4 @@
-class ApiUtils {
+﻿class ApiUtils {
     constructor(baseURL) {
         this.baseURL = process.env.REACT_APP_BACKEND_URL;
     }
@@ -68,6 +68,27 @@ class ApiUtils {
             return await result['forecast'];
         } catch (error) {
             this.handleError(error)
+        }
+    }
+
+    async getDailyForecast(zipcode) {
+        try {
+            let body = { zipcode: zipcode };
+            const result = await this.post('/forecast/single-day', body);
+            console.log('Daily forecast result:', result);
+            return result['forecast'];
+        } catch (error) {
+            this.handleError(error);
+        }
+    }
+
+    async getCurrentWeather(zipcode) {
+        try {
+            const result = await this.get(`/forecast/${zipcode}`);
+            console.log('Current weather result:', result);
+            return result['forecast'];
+        } catch (error) {
+            this.handleError(error);
         }
     }
 }
