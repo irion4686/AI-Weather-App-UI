@@ -76,7 +76,7 @@
             let body = { zipcode: zipcode };
             const result = await this.post('/forecast/single-day', body);
             console.log('Daily forecast result:', result);
-            return result['forecast'];
+            return result;
         } catch (error) {
             this.handleError(error);
         }
@@ -86,7 +86,7 @@
         try {
             const result = await this.get(`/forecast/${zipcode}`);
             console.log('Current weather result:', result);
-            return result['forecast'];
+            return result;
         } catch (error) {
             this.handleError(error);
         }
