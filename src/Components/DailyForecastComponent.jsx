@@ -28,7 +28,7 @@ const DailyForecastComponent = (props) => {
     }, [props.forecast, getDate])
     return (
         <div>
-            { forecast?.ratings !== undefined && <ActivityRatingComponent activity={forecast.activity} rating={forecast.ratings }/> }
+            { forecast !== undefined && forecast.ratings !== null && forecast.activity !== undefined && <ActivityRatingComponent activity={forecast.activity} rating={forecast.ratings }/> }
             <Accordion defaultActiveKey="0" style={{height:'100%', width:'100%', padding:'0px 40px 20px 0px'}} class="border border-white p-2 border-opacity-10">
                 <Accordion.Item>
                     <Accordion.Header  style={{width:'100%'}} >

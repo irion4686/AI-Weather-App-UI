@@ -58,7 +58,7 @@ const WeeklyForecast = (props) => {
                             </Stack>
                         </Form.Group>
                     </Form>
-                    <Form  onSubmit={handleSubmit}>
+                    <Form style={{ padding:'20px 0px 0px 0px'}}  onSubmit={handleSubmit}>
                         <Form.Group>
                             <Stack direction='horizontal' gap={3} >
                                 <Form.Label htmlFor='activity'>Activity:</Form.Label>
