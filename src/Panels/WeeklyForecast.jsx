@@ -5,15 +5,17 @@ import { Button, Container, Stack } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 
 const WeeklyForecast = (props) => {
+    const [zipcode, setZipcode] = useState('');
     const [forecast, setForecast] = useState([]);
     const [retries, setRetries] = useState(0)
     const [isValid, setIsValid] = useState(true)
 
     const apiUtils = new ApiUtils();
-    let getForecast = async (zipcode) => {
+    let getForecast = async (newZipcode) => {
         try {
-            if (forecast.length > 0 || retries === 1) return
-            setForecast(await apiUtils.getWeeklyForecast(zipcode))
+            if (zipcode === newZipcode && (forecast.length > 0 || retries === 1)) return
+            setForecast(await apiUtils.getWeeklyForecast(newZipcode))
+            setZipcode(newZipcode)
             
         } catch (error) {
             props.onError(error)
