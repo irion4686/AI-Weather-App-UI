@@ -51,9 +51,9 @@ function App() {
               <Nav.Item>
                 <Nav.Link eventKey="weekly">7 Day</Nav.Link>
               </Nav.Item>
-              <Nav.Item>
+              {/* <Nav.Item>
                 <Nav.Link eventKey="hourly">Hourly</Nav.Link>
-              </Nav.Item>
+              </Nav.Item> */}
             </Nav>
           </Container>
         </Navbar>
@@ -61,7 +61,7 @@ function App() {
           {error !== null && <ErrorModal show={showError} onHide={onCloseError} error={error}/>}
           {currLocation === 'current' && <CurrentWeather/>}
           {currLocation === 'weekly' && <Container><WeeklyForecast onError={handleError} /></Container>}
-          {currLocation === 'hourly' && <HourlyForecast/>}
+          {/* {currLocation === 'hourly' && <HourlyForecast/>} */}
         </div>
       </Container>
     </div>

@@ -1,4 +1,5 @@
 ﻿import DailyForecastComponent from '../Components/DailyForecastComponent';
+import HourlyForecastComponent from '../Components/HourlyForecastComponent';
 import IconUtils from '../Utils/IconUtils';
 import ApiUtils from '../Utils/ApiUtils';
 import { useState } from 'react';
@@ -11,27 +12,35 @@ const CurrentWeather = (props) => {
     const [retries, setRetries] = useState(0);
     const [isValid, setIsValid] = useState(true);
     const [zipcode, setZipcode] = useState('');
+    const [hourlyForecast, setHourlyForecast] = useState(null);
 
     const apiUtils = new ApiUtils();
 
     let getForecasts = async (zipcode) => {
         try {
-            if (currentWeather || dailyForecast || retries === 1) return;
-
+            if (currentWeather || dailyForecast || hourlyForecast || retries === 1) return;
+    
             console.log("Fetching current weather data...");
             const currentWeatherData = await apiUtils.getCurrentWeather(zipcode);
             console.log("Current weather data received:", currentWeatherData);
             if (currentWeatherData) {
                 setCurrentWeather(currentWeatherData);
             }
-
+    
             console.log("Fetching daily forecast data...");
             const dailyForecastData = await apiUtils.getDailyForecast(zipcode);
             console.log("Daily forecast data received:", dailyForecastData);
             if (dailyForecastData) {
                 setDailyForecast(dailyForecastData);
             }
-
+    
+            console.log("Fetching hourly forecast data...");
+            const hourlyForecastData = await apiUtils.getHourlyForecast(zipcode);
+            console.log("Hourly forecast data received:", hourlyForecastData);
+            if (hourlyForecastData) {
+                setHourlyForecast(hourlyForecastData);
+            }
+    
         } catch (error) {
             console.error("Error fetching data:", error);
             props.onError(error);
@@ -75,7 +84,7 @@ const CurrentWeather = (props) => {
                     </Form.Group>
                 </Form>
             </div>
-
+    
             <p className="h1 text-center" style={{ padding: '20px 0' }}>Today's Forecast</p>
             {dailyForecast && (
                 <div className="text-center mb-4">
@@ -84,7 +93,7 @@ const CurrentWeather = (props) => {
                 </div>
             )}
             <div style={{ padding: '10px 0', borderTop: '1px solid white', width: '100%' }}></div>
-
+    
             {currentWeather && (
                 <div className="text-center mt-4">
                     <h2>Current Weather</h2>
@@ -95,11 +104,18 @@ const CurrentWeather = (props) => {
                     <p style={{ fontSize: '2rem' }}>{currentWeather.temp}°F</p>
                 </div>
             )}
-
+    
+            {hourlyForecast && (
+                <div className="mt-4">
+                    <h2 className="text-center">Hourly Forecast</h2>
+                    <HourlyForecastComponent hourlyForecast={hourlyForecast} />
+                </div>
+            )}
+    
             {dailyForecast && (
                 <div>
                     <div style={{ padding: '10px 0', borderTop: '1px solid white', width: '100%' }}></div>
-                    <p className="h2 text-center mt-4">Today's Forecast</p>
+                    <p className="h2 text-center mt-4">Single Day Forecast</p>
                     <Card className="mt-4 p-3" style={{ backgroundColor: '#f8f9fa' }}>
                         <Row className="text-center">
                             <Col className="d-flex flex-column align-items-center">
@@ -143,10 +159,10 @@ const CurrentWeather = (props) => {
                     </Card>
                 </div>
             )}
-
+    
             {!currentWeather && !dailyForecast && <p className="h1 text-center">Enter a zipcode to get the forecast</p>}
         </Container>
-    );
+    );    
 }
 
 export default CurrentWeather;
