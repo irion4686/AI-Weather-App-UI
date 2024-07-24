@@ -37,7 +37,17 @@ const WeeklyForecast = (props) => {
     }
 
     const onChangeActivity = (event) => {
-        setForecast([...apiUtils.getRatings(event.target?.value, forecast)])
+        let res = apiUtils.get7DayRatings(event.target?.value, forecast).then(res => {
+                console.log('res:' + res)
+                let updated = [...forecast]
+                for (let i=0; i < updated.length; i++) {
+                    updated[i].ratings = res[i];
+                    updated[i].activity = event.target.value
+                    if (i === 6) {
+                        setForecast([...updated]);
+                    }
+                }
+            })
     }
    
     return (
