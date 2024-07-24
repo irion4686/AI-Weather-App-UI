@@ -4,7 +4,7 @@ import IconUtils from '../Utils/IconUtils';
 
 const HourlyForecastComponent = ({ hourlyForecast }) => {
     const formatTime = (timeStr) => {
-        const date = new Date(timeStr + 'Z');
+        const date = new Date(timeStr);
         const options = { hour: 'numeric', minute: 'numeric', hour12: true };
         return date.toLocaleTimeString('en-US', options);
     }
