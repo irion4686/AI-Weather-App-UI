@@ -88,12 +88,12 @@ const CurrentWeather = (props) => {
             <p className="h1 text-center" style={{ padding: '20px 0' }}>Today's Forecast</p>
             {dailyForecast && (
                 <div className="text-center mb-4">
-                    <i className="wi wi-barometer"></i>
+                    {/* <i className="wi wi-barometer"></i> */}
                     <p><strong>Date:</strong> {formatDate(dailyForecast.date)}</p>
                 </div>
             )}
             <div style={{ padding: '10px 0', borderTop: '1px solid white', width: '100%' }}></div>
-    
+
             {currentWeather && (
                 <div className="text-center mt-4">
                     <h2>Current Weather</h2>
@@ -105,17 +105,10 @@ const CurrentWeather = (props) => {
                 </div>
             )}
     
-            {hourlyForecast && (
-                <div className="mt-4">
-                    <h2 className="text-center">Hourly Forecast</h2>
-                    <HourlyForecastComponent hourlyForecast={hourlyForecast} />
-                </div>
-            )}
-    
             {dailyForecast && (
                 <div>
                     <div style={{ padding: '10px 0', borderTop: '1px solid white', width: '100%' }}></div>
-                    <p className="h2 text-center mt-4">Single Day Forecast</p>
+                    <p className="h2 text-center mt-4">Full Day Forecast</p>
                     <Card className="mt-4 p-3" style={{ backgroundColor: '#f8f9fa' }}>
                         <Row className="text-center">
                             <Col className="d-flex flex-column align-items-center">
@@ -157,6 +150,13 @@ const CurrentWeather = (props) => {
                             </Col>
                         </Row>
                     </Card>
+                </div>
+            )}
+    
+            {hourlyForecast && (
+                <div className="mt-4">
+                    <h2 className="text-center">Hourly Forecast</h2>
+                    <HourlyForecastComponent hourlyForecast={hourlyForecast} />
                 </div>
             )}
     
