@@ -91,6 +91,7 @@
             this.handleError(error);
         }
     }
+
     
     async get7DayRatings(activity, forecasts) {
         try {
