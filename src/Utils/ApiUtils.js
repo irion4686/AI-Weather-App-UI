@@ -101,7 +101,8 @@
                 let curr = {
                     activity: activity.toLowerCase(),
                     temp_max: day.max_temp,
-                    precipitation: day.precip_prob,
+                    precipitation: day.precip_sum,
+					prob_precip: day.precip_prob,
                     temp_min: day.min_temp,
                     weather_code: this.getWeatherCode(day.weather)
                 }
