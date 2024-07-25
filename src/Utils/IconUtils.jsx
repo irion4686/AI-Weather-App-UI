@@ -4,7 +4,7 @@ class IconUtils {
         let icon = ''
         switch (weather) {
             case 'Clear sky':
-            case 'Mainly Clear':
+            case 'Mainly clear':
                 icon = 'wi wi-day-sunny'
                 break;
             case 'Partly cloudy':

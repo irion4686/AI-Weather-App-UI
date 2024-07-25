@@ -119,6 +119,32 @@
         }
     }
 
+    async get24HourRatings(activity, forecasts) {
+        try {
+            
+            let requests = []
+            forecasts.forEach(async (hour) => {
+                let curr = {
+                    activity: activity.toLowerCase(),
+                    temp_max: hour.temp,
+                    precipitation: hour.rain + hour.snow,
+					prob_precip: hour.precip_prob,
+                    temp_min: hour.temp,
+                    weather_code: this.getWeatherCode(hour.weather)
+                }
+                requests.push(curr)
+                
+            })
+            let body = {
+                requests: requests
+            }
+            let ratings = await this.post(`/activity-suitability`, body);
+            return await ratings
+        } catch (error) {
+            this.handleError(error);
+        }
+    }
+
     getWeatherCode(description) {
         let WEATHER_CODES = {
             "Clear sky": 0,

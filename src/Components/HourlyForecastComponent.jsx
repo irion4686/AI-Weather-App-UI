@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, Row, Col } from 'react-bootstrap';
 import IconUtils from '../Utils/IconUtils';
+import ActivityRatingComponent from './ActivityRatingComponent';
 
 const HourlyForecastComponent = ({ hourlyForecast }) => {
     const formatTime = (timeStr) => {
@@ -14,6 +15,7 @@ const HourlyForecastComponent = ({ hourlyForecast }) => {
             {hourlyForecast.map((hour, index) => (
                 <Card key={index} style={{ display: 'inline-block', width: '150px', margin: '0 5px' }}>
                     <Card.Body>
+                    { hour.ratings !== null && hour.activity !== undefined && <p class="fw-bold">{hour.activity}: {hour.ratings}</p>}
                         <Card.Title>{formatTime(hour.time)}</Card.Title>
                         {IconUtils.getWeatherIcon(hour.weather)}
                         <Card.Text>{hour.temp}°F</Card.Text>

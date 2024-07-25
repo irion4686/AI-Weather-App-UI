@@ -13,6 +13,7 @@ const CurrentWeather = (props) => {
     const [isValid, setIsValid] = useState(true);
     const [zipcode, setZipcode] = useState('');
     const [hourlyForecast, setHourlyForecast] = useState(null);
+    const [randomKey, setRandomKey] = useState(Math.ceil(Math.random * 10000))
 
     const apiUtils = new ApiUtils();
 
@@ -61,28 +62,61 @@ const CurrentWeather = (props) => {
     }
 
     const formatDate = (dateStr) => {
-        const date = new Date(dateStr + 'Z');
+        const [year, month, day] = dateStr.split('-');
+        const dateObject = new Date(year, month - 1, day);
         const options = { weekday: 'short', month: 'short', day: 'numeric' };
-        return date.toLocaleDateString('en-US', options);
+        return dateObject.toLocaleDateString('en-US', options);
     }
+
+    const onChangeActivity = (event) => {
+        apiUtils.get24HourRatings(event.target?.value, hourlyForecast).then(res => {
+                let updated = [...hourlyForecast]
+                for (let i=0; i < updated.length; i++) {
+                    updated[i].ratings = res[i];
+                    updated[i].activity = event.target.value
+                    if (i === 23) {
+                        setHourlyForecast([...updated]);
+                        setRandomKey(Math.ceil(Math.random * 10000))
+                    }
+                }
+            })
+    }
+
 
     return (
         <Container style={{ margin: '20px' }}>
             <div className="d-flex justify-content-center">
-                <Form onSubmit={handleSubmit}>
-                    <Form.Group>
-                        <Stack direction='horizontal' gap={3}>
-                            <Form.Label htmlFor='zipcode'>Zipcode:</Form.Label>
-                            <Stack>
-                                <Form.Control required id='zipcode' placeholder='Enter zipcode' isInvalid={!isValid} />
-                                <Form.Control.Feedback type="invalid">
-                                    Please provide a valid zip.
-                                </Form.Control.Feedback>
+                <stack>
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group>
+                            <Stack direction='horizontal' gap={3}>
+                                <Form.Label htmlFor='zipcode'>Zipcode:</Form.Label>
+                                <Stack>
+                                    <Form.Control required id='zipcode' placeholder='Enter zipcode' isInvalid={!isValid} />
+                                    <Form.Control.Feedback type="invalid">
+                                        Please provide a valid zip.
+                                    </Form.Control.Feedback>
+                                </Stack>
+                                <Button size='sm' variant='light' type='submit'>Get Forecast</Button>
                             </Stack>
-                            <Button size='sm' variant='light' type='submit'>Get Forecast</Button>
-                        </Stack>
-                    </Form.Group>
-                </Form>
+                        </Form.Group>
+                    </Form>
+                    { hourlyForecast?.length > 0 && 
+                        <Form style={{ padding:'20px 0px 0px 0px'}}  onSubmit={handleSubmit}>
+                            <Form.Group>
+                                <Stack direction='horizontal' gap={3} >
+                                    <Form.Label htmlFor='activity'>Activity:</Form.Label>
+                                    <Form.Select required id='activity' onChange={onChangeActivity}>
+                                        <option>Choose an activity</option>
+                                        <option value='Running'>Running</option>
+                                        <option value='Hiking'>Hiking</option>
+                                        <option value='Golf'>Golf</option>
+                                    </Form.Select>
+                                </Stack>
+                            </Form.Group>
+                        </Form>
+                    }
+                </stack>
             </div>
     
             <p className="h1 text-center" style={{ padding: '20px 0' }}>Today's Forecast</p>
@@ -156,7 +190,7 @@ const CurrentWeather = (props) => {
             {hourlyForecast && (
                 <div className="mt-4">
                     <h2 className="text-center">Hourly Forecast</h2>
-                    <HourlyForecastComponent hourlyForecast={hourlyForecast} />
+                    <HourlyForecastComponent key={randomKey} hourlyForecast={hourlyForecast} />
                 </div>
             )}
     
